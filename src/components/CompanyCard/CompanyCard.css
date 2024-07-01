@@ -1,0 +1,38 @@
+.card {
+  padding: 4vw;
+  border-radius: 10%;
+  margin-bottom: 4vw;
+  width: 92vw;
+}
+
+.logo {
+  width: 15vw;
+  height: 15vw;
+  border-radius: 50%;
+}
+
+.name {
+  font-size: 10vw;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+.line {
+  height: 1px;
+  background-color: #efefef;
+}
+
+.mark {
+  font-size: 6vw;
+}
+
+.text2 {
+  font-size: 4vw;
+}
+
+.name-logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2vw;
+}

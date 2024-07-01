@@ -1,0 +1,13 @@
+.main {
+  padding: 4vw;
+  background-color: #efefef;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.spinner {
+  width: 20vw;
+  height: 20vw;
+}

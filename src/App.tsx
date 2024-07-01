@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import StartScreen from "./components/StartScreen";
+import StartScreen from "./components/StartScreen/StartScreen";
+import CardsList from "./components/CardsList/CardsList";
+import Header from "./components/Header/Header";
 
 function App() {
   const [show, setShow] = useState(true);
@@ -16,7 +18,12 @@ function App() {
   }, []);
 
   if (!show) {
-    return null;
+    return (
+      <>
+        <Header />
+        <CardsList />
+      </>
+    );
   }
 
   return <StartScreen />;

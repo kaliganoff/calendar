@@ -4,4 +4,25 @@
 
 body {
   height: 100vh;
+  font-family: "SegoeUIRegular";
+}
+
+.bold-font {
+  font-family: "SegoeUIBold";
+}
+
+@font-face {
+  font-family: "SegoeUIRegular";
+  src:
+    local("SegoeUIRegular"),
+    url("./fonts/SegoeUIRegular/SegoeUIRegular.ttf") format("truetype");
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: "SegoeUIBold";
+  src:
+    local("SegoeUIBold"),
+    url("./fonts/SegoeUIBold/SegoeUIBold.ttf") format("truetype");
+  font-weight: normal;
 }

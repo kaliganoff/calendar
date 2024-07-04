@@ -4,6 +4,7 @@ import SvgComponent from "../SvgComponent/SvgComponent";
 import Eye from "../Eye/Eye";
 
 function CompanyCard({
+  id,
   name,
   logo,
   mark,
@@ -15,7 +16,9 @@ function CompanyCard({
   accentColor,
   mainColor,
   backgroundColor,
+  onButtonClick,
 }: {
+  id: string;
   name: string;
   mark: string;
   cashback: string;
@@ -27,6 +30,7 @@ function CompanyCard({
   mainColor: string;
   accentColor: string;
   backgroundColor: string;
+  onButtonClick: (button) => void;
 }) {
   return (
     <div style={{ backgroundColor: cardBackgroundColor }} className="card">
@@ -39,7 +43,7 @@ function CompanyCard({
       </div>
       <div className="line" />
       <div className="loyalty-container">
-        <span style={{ color: highlightTextColor }} className="mark">
+        <span style={{ color: highlightTextColor }} className="mark bold-font">
           {mark}
         </span>
         <span style={{ color: textColor }} className="mark-text">
@@ -68,12 +72,18 @@ function CompanyCard({
         <button
           style={{ backgroundColor: cardBackgroundColor }}
           className="button"
+          onClick={() =>
+            onButtonClick(`Нажата кнопка Показать, ид компании: ${id}`)
+          }
         >
           <Eye width="8vw" height="8vw" color={mainColor} />
         </button>
         <button
           style={{ backgroundColor: cardBackgroundColor }}
           className="button"
+          onClick={() =>
+            onButtonClick(`Нажата кнопка Удалить, ид компании: ${id}`)
+          }
         >
           <SvgComponent width="8vw" height="8vw" color={accentColor} />
         </button>
@@ -86,6 +96,9 @@ function CompanyCard({
             borderRadius: "10%",
             fontSize: "4vw",
           }}
+          onClick={() =>
+            onButtonClick(`Нажата кнопка Подробнее, ид компании: ${id}`)
+          }
         >
           Подробнее
         </button>

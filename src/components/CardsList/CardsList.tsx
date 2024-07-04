@@ -3,6 +3,7 @@ import { useInView } from "react-intersection-observer";
 import getAllCompanies from "../../services/getAllCompanies";
 import "./CardsList.css";
 import CompanyCard from "../CompanyCard/CompanyCard";
+import Modal from "../Modal/Modal";
 
 interface Company {
   company: {
@@ -31,6 +32,8 @@ function CardsList() {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [offset, setOffset] = useState(0);
   const [fetching, setFetching] = useState(false);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalText, setModalText] = useState("");
 
   const { ref, inView } = useInView({
     threshold: 1,
@@ -38,32 +41,54 @@ function CardsList() {
 
   useEffect(() => {
     async function getCompanies() {
-      const newCompanies = await getAllCompanies(offset);
-      setCompanies((prevCompanies) => [...prevCompanies, ...newCompanies]);
-      setOffset((prevState) => prevState + 10);
-      console.log(companies);
-      console.log(fetching);
-    }
-    if (fetching) {
       try {
-        getCompanies();
+        const newCompanies = await getAllCompanies(offset);
+        if (newCompanies.length > 0) {
+          setCompanies((prevCompanies) => [...prevCompanies, ...newCompanies]);
+          setOffset((prevState) => prevState + 10);
+          console.log(companies);
+          console.log(fetching);
+        }
       } catch (error) {
-        console.log(error);
+        setModalIsOpen(true);
+        setModalText(error.message);
+        document.body.style.overflow = "hidden";
+        console.log(modalText);
       }
     }
+    if (fetching) {
+      getCompanies();
+    }
     setFetching(false);
-  }),
-    [fetching];
+  }), [fetching, setFetching];
 
   useEffect(() => {
     setFetching(true);
   }, [inView]);
 
+  function HandleButtonClick(button) {
+    setModalIsOpen(true);
+    setModalText(button);
+    document.body.style.overflow = "hidden";
+  }
+
+  function HandleModalClose() {
+    setModalIsOpen(false);
+    setModalText("");
+    document.body.style.overflow = "";
+  }
+
   return (
     <main className="main">
+      <Modal
+        isOpen={modalIsOpen}
+        onClose={HandleModalClose}
+        text={modalText}
+       />
       {companies.map((company: Company) => (
         <CompanyCard
           key={company.company.companyId}
+          id={company.company.companyId}
           name={company.mobileAppDashboard.companyName}
           logo={company.mobileAppDashboard.logo}
           mark={company.customerMarkParameters.mark}
@@ -75,10 +100,11 @@ function CardsList() {
           mainColor={company.mobileAppDashboard.mainColor}
           accentColor={company.mobileAppDashboard.accentColor}
           backgroundColor={company.mobileAppDashboard.backgroundColor}
+          onButtonClick={HandleButtonClick}
         />
       ))}
-      <div ref={ref}></div>
-      {fetching && (
+      <div ref={ref} />
+      {inView && companies.length < 40 && !modalIsOpen && (
         <div className="loader-container">
           <div className="loader" />
           <p className="text-loader">Подгрузка компаний</p>

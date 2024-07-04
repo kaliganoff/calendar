@@ -60,6 +60,9 @@
 .button {
   border: none;
   margin-top: 4vw;
+  height: 4vw;
+  width: 4vw;
+  margin-bottom: 4vw;
 }
 
 .button-icon {
@@ -69,5 +72,7 @@
 
 .button-container {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
   gap: 20vw;
 }

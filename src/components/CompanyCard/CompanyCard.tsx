@@ -95,6 +95,8 @@ function CompanyCard({
             border: "none",
             borderRadius: "10%",
             fontSize: "4vw",
+            height: '12vw',
+            width: '40%'
           }}
           onClick={() =>
             onButtonClick(`Нажата кнопка Подробнее, ид компании: ${id}`)

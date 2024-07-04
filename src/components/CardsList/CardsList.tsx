@@ -31,7 +31,6 @@ interface Company {
 function CardsList() {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [offset, setOffset] = useState(0);
-  const [fetching, setFetching] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalText, setModalText] = useState("");
 
@@ -46,24 +45,16 @@ function CardsList() {
         if (newCompanies.length > 0) {
           setCompanies((prevCompanies) => [...prevCompanies, ...newCompanies]);
           setOffset((prevState) => prevState + 10);
-          console.log(companies);
-          console.log(fetching);
         }
       } catch (error) {
         setModalIsOpen(true);
         setModalText(error.message);
         document.body.style.overflow = "hidden";
-        console.log(modalText);
       }
     }
-    if (fetching) {
+    if (inView) {
       getCompanies();
     }
-    setFetching(false);
-  }), [fetching, setFetching];
-
-  useEffect(() => {
-    setFetching(true);
   }, [inView]);
 
   function HandleButtonClick(button) {
@@ -80,11 +71,7 @@ function CardsList() {
 
   return (
     <main className="main">
-      <Modal
-        isOpen={modalIsOpen}
-        onClose={HandleModalClose}
-        text={modalText}
-       />
+      <Modal isOpen={modalIsOpen} onClose={HandleModalClose} text={modalText} />
       {companies.map((company: Company) => (
         <CompanyCard
           key={company.company.companyId}

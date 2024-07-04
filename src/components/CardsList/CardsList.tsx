@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useInView } from "react-intersection-observer";
 import getAllCompanies from "../../services/getAllCompanies";
 import "./CardsList.css";
 import CompanyCard from "../CompanyCard/CompanyCard";
@@ -11,11 +12,17 @@ interface Company {
     companyName: string;
     logo: string;
     cardBackgroundColor: string;
+    highlightTextColor: string;
+    textColor: string;
+    mainColor: string;
+    accentColor: string;
+    backgroundColor: string;
   };
   customerMarkParameters: {
     mark: string;
     loyaltyLevel: {
       name: string;
+      cashToMark: string;
     };
   };
 }
@@ -23,52 +30,35 @@ interface Company {
 function CardsList() {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [offset, setOffset] = useState(0);
+  const [fetching, setFetching] = useState(false);
+
+  const { ref, inView } = useInView({
+    threshold: 1,
+  });
 
   useEffect(() => {
     async function getCompanies() {
       const newCompanies = await getAllCompanies(offset);
-      const allCompanies = [...companies, ...newCompanies];
-      setCompanies(allCompanies);
-      if (companies.length < 40) {
-        setOffset((prevState) => prevState + 10);
+      setCompanies((prevCompanies) => [...prevCompanies, ...newCompanies]);
+      setOffset((prevState) => prevState + 10);
+      console.log(companies);
+      console.log(fetching);
+    }
+    if (fetching) {
+      try {
+        getCompanies();
+      } catch (error) {
+        console.log(error);
       }
     }
-    if (offset < 50) {
-      getCompanies();
-    }
-  }, [offset, companies]);
+    setFetching(false);
+  }),
+    [fetching];
 
-  if (companies.length === 0) {
-    return (
-      <main className="main">
-        <div>
-          <img className="spinner" src="spinner.gif" alt="" />
-          <p>Loading...</p>
-        </div>
-      </main>
-    );
-  }
+  useEffect(() => {
+    setFetching(true);
+  }, [inView]);
 
-  if (companies.length < 40) {
-    return (
-      <main className="main">
-        {companies.map((company: Company) => (
-          <CompanyCard
-            key={company.company.companyId}
-            name={company.mobileAppDashboard.companyName}
-            logo={company.mobileAppDashboard.logo}
-            mark={company.customerMarkParameters.mark}
-            loyaltyLevel={company.customerMarkParameters.loyaltyLevel.name}
-            bgcolor={company.mobileAppDashboard.cardBackgroundColor}
-          />
-        ))}
-        <div>
-          <img className="spinner" src="spinner.gif" alt="" />
-          <p>Loading...</p>
-        </div>
-      </main>
-    );
-  }
   return (
     <main className="main">
       {companies.map((company: Company) => (
@@ -77,10 +67,23 @@ function CardsList() {
           name={company.mobileAppDashboard.companyName}
           logo={company.mobileAppDashboard.logo}
           mark={company.customerMarkParameters.mark}
+          cashback={company.customerMarkParameters.loyaltyLevel.cashToMark}
           loyaltyLevel={company.customerMarkParameters.loyaltyLevel.name}
-          bgcolor={company.mobileAppDashboard.cardBackgroundColor}
+          cardBackgroundColor={company.mobileAppDashboard.cardBackgroundColor}
+          highlightTextColor={company.mobileAppDashboard.highlightTextColor}
+          textColor={company.mobileAppDashboard.textColor}
+          mainColor={company.mobileAppDashboard.mainColor}
+          accentColor={company.mobileAppDashboard.accentColor}
+          backgroundColor={company.mobileAppDashboard.backgroundColor}
         />
       ))}
+      <div ref={ref}></div>
+      {fetching && (
+        <div className="loader-container">
+          <div className="loader" />
+          <p className="text-loader">Подгрузка компаний</p>
+        </div>
+      )}
     </main>
   );
 }

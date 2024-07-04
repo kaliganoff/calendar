@@ -8,7 +8,7 @@ async function getAllCompanies(offset: number) {
       },
       body: JSON.stringify({
         offset,
-        limit: 5,
+        limit: 10,
       }),
     },
   );

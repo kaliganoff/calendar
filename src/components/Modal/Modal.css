@@ -34,3 +34,7 @@
   padding: 2vw 12vw;
   color: #ffffff;
 }
+
+.modal-button:hover {
+  cursor: pointer;
+}

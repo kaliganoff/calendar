@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import getAllCompanies from "../../services/getAllCompanies";
 import "./CardsList.css";
@@ -33,6 +33,7 @@ function CardsList() {
   const [offset, setOffset] = useState(0);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalText, setModalText] = useState("");
+  const [NoCompanies, setNoCompanies] = useState(false);
 
   const { ref, inView } = useInView({
     threshold: 1,
@@ -45,23 +46,25 @@ function CardsList() {
         if (newCompanies.length > 0) {
           setCompanies((prevCompanies) => [...prevCompanies, ...newCompanies]);
           setOffset((prevState) => prevState + 10);
+        } else if (companies.length === 0 && newCompanies.length === 0) {
+          setNoCompanies(true);
         }
       } catch (error) {
         setModalIsOpen(true);
-        setModalText(error.message);
+        setModalText(error instanceof Error ? error.message : "");
         document.body.style.overflow = "hidden";
       }
     }
     if (inView) {
       getCompanies();
     }
-  }, [inView]);
+  }, [inView]); // eslint-disable-line
 
-  function HandleButtonClick(button) {
+  const HandleButtonClick = useCallback((text: string) => {
     setModalIsOpen(true);
-    setModalText(button);
+    setModalText(text);
     document.body.style.overflow = "hidden";
-  }
+  }, []);
 
   function HandleModalClose() {
     setModalIsOpen(false);
@@ -71,30 +74,28 @@ function CardsList() {
 
   return (
     <main className="main">
-      <Modal isOpen={modalIsOpen} onClose={HandleModalClose} text={modalText} />
+      <Modal
+        isOpen={modalIsOpen}
+        onClose={() => HandleModalClose()}
+        text={modalText}
+      />
       {companies.map((company: Company) => (
         <CompanyCard
           key={company.company.companyId}
-          id={company.company.companyId}
-          name={company.mobileAppDashboard.companyName}
-          logo={company.mobileAppDashboard.logo}
-          mark={company.customerMarkParameters.mark}
-          cashback={company.customerMarkParameters.loyaltyLevel.cashToMark}
-          loyaltyLevel={company.customerMarkParameters.loyaltyLevel.name}
-          cardBackgroundColor={company.mobileAppDashboard.cardBackgroundColor}
-          highlightTextColor={company.mobileAppDashboard.highlightTextColor}
-          textColor={company.mobileAppDashboard.textColor}
-          mainColor={company.mobileAppDashboard.mainColor}
-          accentColor={company.mobileAppDashboard.accentColor}
-          backgroundColor={company.mobileAppDashboard.backgroundColor}
+          company={company}
           onButtonClick={HandleButtonClick}
         />
       ))}
       <div ref={ref} />
-      {inView && companies.length < 40 && !modalIsOpen && (
+      {inView && companies.length < 40 && !modalIsOpen && !NoCompanies && (
         <div className="loader-container">
           <div className="loader" />
           <p className="text-loader">Подгрузка компаний</p>
+        </div>
+      )}
+      {NoCompanies && (
+        <div>
+          <p className="text-loader">Нет компаний</p>
         </div>
       )}
     </main>

@@ -59,15 +59,25 @@
 
 .button {
   border: none;
+}
+
+.button:hover {
+  cursor: pointer;
+}
+
+.icon {
   margin-top: 4vw;
   height: 4vw;
   width: 4vw;
   margin-bottom: 4vw;
 }
 
-.button-icon {
-  height: 8vw;
-  width: 8vw;
+.rectangular-button {
+  border-radius: 10%;
+  font-size: 4vw;
+  height: 12vw;
+  width: 40%;
+  margin-top: 2vw;
 }
 
 .button-container {

@@ -1,6 +1,12 @@
-import * as React from "react";
-
-function SvgComponent({ width, height, color }) {
+function Trash({
+  width,
+  height,
+  color,
+}: {
+  width: string;
+  height: string;
+  color: string;
+}) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -11,7 +17,6 @@ function SvgComponent({ width, height, color }) {
       style={{
         shapeRendering: "geometricPrecision",
         textRendering: "geometricPrecision",
-        imageRendering: "optimizeQuality",
         fillRule: "evenodd",
         clipRule: "evenodd",
       }}
@@ -31,4 +36,4 @@ function SvgComponent({ width, height, color }) {
     </svg>
   );
 }
-export default SvgComponent;
+export default Trash;

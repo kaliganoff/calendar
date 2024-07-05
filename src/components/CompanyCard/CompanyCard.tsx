@@ -1,37 +1,55 @@
-import React from "react";
 import "./CompanyCard.css";
-import SvgComponent from "../SvgComponent/SvgComponent";
+import Trash from "../Trash/Trash";
 import Eye from "../Eye/Eye";
 
+interface Company {
+  company: {
+    companyId: string;
+  };
+  mobileAppDashboard: {
+    companyName: string;
+    logo: string;
+    cardBackgroundColor: string;
+    highlightTextColor: string;
+    textColor: string;
+    mainColor: string;
+    accentColor: string;
+    backgroundColor: string;
+  };
+  customerMarkParameters: {
+    mark: string;
+    loyaltyLevel: {
+      name: string;
+      cashToMark: string;
+    };
+  };
+}
+
 function CompanyCard({
-  id,
-  name,
-  logo,
-  mark,
-  cashback,
-  loyaltyLevel,
-  cardBackgroundColor,
-  highlightTextColor,
-  textColor,
-  accentColor,
-  mainColor,
-  backgroundColor,
+  company,
   onButtonClick,
 }: {
-  id: string;
-  name: string;
-  mark: string;
-  cashback: string;
-  logo: string;
-  loyaltyLevel: string;
-  cardBackgroundColor: string;
-  highlightTextColor: string;
-  textColor: string;
-  mainColor: string;
-  accentColor: string;
-  backgroundColor: string;
-  onButtonClick: (button) => void;
+  company: Company;
+  onButtonClick: (text: string) => void;
 }) {
+  const {
+    company: { companyId: id },
+    mobileAppDashboard: {
+      companyName: name,
+      logo,
+      cardBackgroundColor,
+      highlightTextColor,
+      textColor,
+      mainColor,
+      accentColor,
+      backgroundColor,
+    },
+    customerMarkParameters: {
+      mark,
+      loyaltyLevel: { name: loyaltyLevel, cashToMark: cashback },
+    },
+  } = company;
+
   return (
     <div style={{ backgroundColor: cardBackgroundColor }} className="card">
       <div
@@ -71,35 +89,36 @@ function CompanyCard({
       <div className="button-container">
         <button
           style={{ backgroundColor: cardBackgroundColor }}
-          className="button"
+          aria-label="Показать"
+          type="button"
+          className="button icon"
           onClick={() =>
-            onButtonClick(`Нажата кнопка Показать, ид компании: ${id}`)
+            onButtonClick(`Нажата кнопка «Показать», ид компании: ${id}`)
           }
         >
           <Eye width="8vw" height="8vw" color={mainColor} />
         </button>
         <button
           style={{ backgroundColor: cardBackgroundColor }}
-          className="button"
+          aria-label="Удалить"
+          type="button"
+          className="button icon"
           onClick={() =>
-            onButtonClick(`Нажата кнопка Удалить, ид компании: ${id}`)
+            onButtonClick(`Нажата кнопка «Удалить», ид компании: ${id}`)
           }
         >
-          <SvgComponent width="8vw" height="8vw" color={accentColor} />
+          <Trash width="8vw" height="8vw" color={accentColor} />
         </button>
         <button
           style={{
-            color: mainColor,
-            marginTop: "2vw",
             backgroundColor,
-            border: "none",
-            borderRadius: "10%",
-            fontSize: "4vw",
-            height: '12vw',
-            width: '40%'
+            color: mainColor,
           }}
+          className="button rectangular-button"
+          aria-label="Подробнее"
+          type="button"
           onClick={() =>
-            onButtonClick(`Нажата кнопка Подробнее, ид компании: ${id}`)
+            onButtonClick(`Нажата кнопка «Подробнее», ид компании: ${id}`)
           }
         >
           Подробнее

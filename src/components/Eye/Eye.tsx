@@ -1,6 +1,12 @@
-import * as React from "react";
-
-function Eye({ width, height, color }) {
+function Eye({
+  width,
+  height,
+  color,
+}: {
+  width: string;
+  height: string;
+  color: string;
+}) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -11,7 +17,6 @@ function Eye({ width, height, color }) {
       style={{
         shapeRendering: "geometricPrecision",
         textRendering: "geometricPrecision",
-        imageRendering: "optimizeQuality",
         fillRule: "evenodd",
         clipRule: "evenodd",
       }}

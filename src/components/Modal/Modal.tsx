@@ -1,22 +1,27 @@
-import React, { Children } from "react";
 import "./Modal.css";
 
-function Modal({ isOpen, text, onClose }) {
-  return (
-    <>
-      {isOpen && (
-        <>
-          <div className="modal-overlay" />
-          <div className="modal">
-            <p>{text}</p>
-            <button className="modal-button" onClick={onClose}>
-              Хорошо
-            </button>
-          </div>
-        </>
-      )}
-    </>
-  );
+function Modal({
+  isOpen,
+  text,
+  onClose,
+}: {
+  isOpen: boolean;
+  text: string;
+  onClose: () => void;
+}) {
+  if (isOpen)
+    return (
+      <div className="modal-overlay">
+        <div className="modal">
+          <p>{text}</p>
+          <button type="button" className="modal-button" onClick={onClose}>
+            Хорошо
+          </button>
+        </div>
+      </div>
+    );
+
+  return null;
 }
 
 export default Modal;
